@@ -1,1 +1,1 @@
-from Visualization import makefig
+from visualization import makefig
