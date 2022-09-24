@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 
 def zscore(x: any, axis=None):
@@ -29,7 +30,7 @@ def zscore(x: any, axis=None):
     This function preserves ndarray subclasses, and works also with matrices and masked arrays
     (it uses asanyarray instead of asarray for parameters).
     """
-    zs = (x-x.mean(axis=axis, keepdims=True))/np.std(x, axis=axis, keepdims=True)
+    zs = (x - x.mean(axis=axis, keepdims=True)) / np.std(x, axis=axis, keepdims=True)
     return zs
 
 
@@ -53,7 +54,7 @@ def min_max(x: any, axis=None):
     --------
     zscore: Compute the z score.
     """
-    result = (x-x.min(axis=axis, keepdims=True))/(x.max(axis=axis, keepdims=True)-x.min(axis=axis, keepdims=True))
+    result = (x - x.min(axis=axis, keepdims=True)) / (x.max(axis=axis, keepdims=True) - x.min(axis=axis, keepdims=True))
     return result
 
 
@@ -90,7 +91,27 @@ def seqseg(
     ... b.shape
     (10, 10)
     """
-    num = len(x) // (length*fs)
-    itr = map(lambda n: x[int(length*fs)*n:int(length*fs)*(n+1)],
+    num = len(x) // (length * fs)
+    itr = map(lambda n: x[int(length * fs) * n:int(length * fs) * (n + 1)],
               range(num))
     return np.array([i for i in itr])
+
+
+def check_array(x):
+    """Input validation on an array, list, sparse matrix or similar for training model.
+
+    Parameters
+    ----------
+    x: ndarray
+        Input object to check.
+
+    Returns
+    -------
+
+    """
+    x = np.array(x)
+    assert len(x.shape) >= 2, "input array dimension must be greater than 2."
+    df = pd.DataFrame(x)
+    is_null = np.array(df.isnull().any(axis=1))
+    is_null = list(map(lambda n: not n, is_null))
+    assert all(is_null), "input array contains missing value or nan."

@@ -146,4 +146,3 @@ def zero_crossing(x: any, winsize: float = 16, overlap: float = 0.92):
         zero_crossing_rate[i] = 1/(2*len(frame)) * np.sum(np.abs(np.sign(frame)-np.sign(next_frame)))
 
     return zero_crossing_rate
-
