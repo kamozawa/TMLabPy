@@ -13,5 +13,9 @@ class Tests(object):
         a = np.random.normal(0, 1, 640)
         assert signal.stft(a).shape == (65, 313)
 
+    def test_ssa(self):
+        a = np.random.normal(0, 1, 640)
+        assert len(a) == len(signal.ssa(a, 20))
+
 
 testing.do_test(Tests)
